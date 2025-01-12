@@ -1,0 +1,9 @@
+{
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#3a3939",
+    "statusBar.background": "#3a3939",
+    "statusBar.debuggingBackground": "#3a3939",
+    "statusBarItem.remoteBackground": "#3a3939"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
