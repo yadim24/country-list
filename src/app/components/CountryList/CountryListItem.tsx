@@ -7,95 +7,135 @@ import { Transition } from "react-transition-group";
 import { TransitionStatus } from "react-transition-group/Transition";
 import { Button } from "../Button";
 
-// const duration = 1000;
+const duration1 = 800;
 
-// const defaultStyle = {
-//   transition: `transform ${duration}ms ease-in-out`,
-// };
+const defaultStyle1 = {
+  transition: `transform ${duration1}ms ease-in-out`,
+};
 
-// const transitionStyles: Partial<Record<TransitionStatus, CSSProperties>> = {
-//   entering: { transform: "none" },
-//   entered: { transform: "translateX(100%)" },
-//   exiting: { transform: "none" },
-//   exited: { transform: "translateY(32px)" },
-// };
+const transitionStyles1: Partial<Record<TransitionStatus, CSSProperties>> = {
+  entering: { transform: "translateX(100%)" },
+  entered: { transform: "translateX(100%)" },
+  exiting: { transform: "none" },
+  exited: { transform: "none" },
+};
 
-// const duration1 = 600;
+const duration2 = 800;
 
-// const defaultStyle1 = {
-//   transition: `transformX ${duration1}ms ease-in-out`,
-// };
+const defaultStyle2 = {
+  transition: `transform ${duration2}ms ease-in-out`,
+};
 
-// const transitionStyles1: Partial<Record<TransitionStatus, CSSProperties>> = {
-//   entering: { transform: "none" },
-//   entered: { transform: "translateX(100%)" },
-// };
+const transitionStyles2: Partial<Record<TransitionStatus, CSSProperties>> = {
+  entering: { transform: "translateY(-32px)" },
+  entered: { transform: "translateY(-32px)" },
+  exiting: { transform: "none" },
+  exited: { transform: "none" },
+  // entering: { transform: "none" },
+  // entered: { transform: "none" },
+  // exiting: { transform: "translateY(-32px)" },
+  // exited: { transform: "translateY(-32px)" },
+};
 
-// const duration2 = 600;
+const duration3 = 400;
 
-// const defaultStyle2 = {
-//   transition: `transformY ${duration2}ms ease-in-out`,
-// };
+const defaultStyle3 = {
+  transition: `transform ${duration1}ms ease-in-out`,
+};
 
-// const transitionStyles2: Partial<Record<TransitionStatus, CSSProperties>> = {
-//   entering: { transform: "none" },
-//   entered: { transform: "translateY(-32px)" },
-// };
+const transitionStyles3: Partial<Record<TransitionStatus, CSSProperties>> = {
+  entering: { transform: "translateX(100%)" },
+  entered: { transform: "translateX(100%)" },
+  exiting: { transform: "translateX(100%)" },
+  exited: { transform: "translateX(100%)" },
+};
+
+const duration4 = 400;
+
+const defaultStyle4 = {
+  transition: `transform ${duration2}ms ease-in-out`,
+};
+
+const transitionStyles4: Partial<Record<TransitionStatus, CSSProperties>> = {
+  // entering: { transform: "translateY(-32px)" },
+  // entered: { transform: "translateY(-32px)" },
+  // exiting: { transform: "none" },
+  // exited: { transform: "none" },
+  entering: { transform: "none" },
+  entered: { transform: "none" },
+  exiting: { transform: "none" },
+  exited: { transform: "none" },
+};
 
 type DefaultStyle = {
   transition: string;
 };
 
 type Props = {
-  defaultStyle: DefaultStyle;
-  transitionStyles: Partial<Record<TransitionStatus, CSSProperties>>;
+  // defaultStyle: DefaultStyle;
+  // transitionStyles: Partial<Record<TransitionStatus, CSSProperties>>;
   country: CountryDTO;
   countryIndex: number;
   deletedIndex: number;
   finished: boolean;
-  duration: number;
+  // duration: number;
   setFinished: () => void;
   setDeletedIndex: () => void;
-  // handleClick: () => void;
+  handleClick: () => void;
 };
 
 export const CountryListItem: FC<Props> = ({
-  defaultStyle,
-  transitionStyles,
+  // defaultStyle,
+  // transitionStyles,
   country,
   countryIndex,
   deletedIndex,
   finished,
-  duration,
+  // duration,
   setFinished,
   setDeletedIndex,
-  // handleClick,
+  handleClick,
 }) => {
   const nodeRef = useRef(null);
   // const [inPropDelete, setInPropDelete] = useState(false);
 
-  // const currentTransition = (): [
-  //   DefaultStyle,
-  //   Partial<Record<TransitionStatus, CSSProperties>>,
-  //   number,
-  // ] => {
-  //   if (countryIndex > deletedIndex)
-  //     return [defaultStyle2, transitionStyles2, duration2];
+  const currentTransition = (): [
+    DefaultStyle,
+    Partial<Record<TransitionStatus, CSSProperties>>,
+    number,
+  ] => {
+    if (!finished && deletedIndex !== -1 && countryIndex > deletedIndex)
+      return [defaultStyle2, transitionStyles2, duration2];
 
-  //   return [defaultStyle1, transitionStyles1, duration1];
-  // };
+    if (finished && deletedIndex === countryIndex)
+      return [defaultStyle3, transitionStyles3, duration3];
 
-  // const [defaultStyle, transitionStyles, duration] = currentTransition();
+    if (finished && deletedIndex !== -1 && countryIndex > deletedIndex)
+      return [defaultStyle4, transitionStyles4, duration4];
+
+    return [defaultStyle1, transitionStyles1, duration1];
+  };
+
+  const [defaultStyle, transitionStyles, duration] = currentTransition();
   // console.log("Debug ~ duration:", duration);
   // console.log("Debug ~ transitionStyles:", transitionStyles);
-  // console.log("Debug ~ defaultStyle:", defaultStyle);
+  console.log(
+    "Debug ~ in:",
+    !finished && deletedIndex !== -1 && countryIndex >= deletedIndex,
+  );
+
+  const handleFinish = (): void => {
+    setFinished();
+    handleClick();
+  };
 
   return (
     <Transition
       nodeRef={nodeRef}
-      in={deletedIndex !== -1 && countryIndex >= deletedIndex}
+      in={!finished && deletedIndex !== -1 && countryIndex >= deletedIndex}
       timeout={duration}
       onEntered={setFinished}
+      onExited={handleClick}
     >
       {(state) => (
         <li
